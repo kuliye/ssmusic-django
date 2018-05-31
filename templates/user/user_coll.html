@@ -1,0 +1,74 @@
+{% extends 'user/user_base.html' %}
+{% block user_base %}
+    <script>
+    function delete_coll(collid){
+        if (confirm("确认要删除？")) {
+            $.get('/user/coll_delete/?collid='+collid,function (jieguo) {
+                if(jieguo.data==1){alert('删除成功');window.location.reload()}
+                else{alert('删除失败')}
+
+        })
+        }
+    }
+    function delete_coll_detail(coll_de_id) {
+        if (confirm("确认要删除？")) {
+            $.get('/user/coll_delete_detail/?colldeid='+coll_de_id,function (jieguo) {
+                if(jieguo.data==1){alert('删除成功');window.location.reload()}
+                else{alert('删除失败')}
+            })
+        }
+    }
+    function add_playlist(musicid){
+        $.get('/add_music/?music_id='+musicid,function (jieguo) {
+            if(jieguo.data==1){
+                alert('已添加至播放列表')
+            }else{
+                alert('添加失败')
+            }
+        })
+    }
+    </script>
+
+
+
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#music_update" style="float: left;margin-top: 10px">创建收藏夹</button>
+    {% for item in data %}
+        <div class="list-group" style="width: 800px;margin: 10px auto">
+          <li class="list-group-item active"><div style="color: white">
+            {{ item.collection.name }}<input class="" type="image" src="/static/media/icon/icon_delete.png" style="float: right" onclick="delete_coll({{ item.collection.id }})">
+          </div></li>
+    {% for music in item.coll %}
+  <li class="list-group-item"><a href="/detail{{ music.music_id }}_info">{{ music.music.name }}</a>
+      <input onclick="add_playlist({{ music.music_id }})" type="image" src="/static/media/icon/icon_add.png" style="float: right"><input class="" type="image" src="/static/media/icon/icon_cha.png" style="float: right" onclick="delete_coll_detail({{ music.id }})"></li>
+
+      {% endfor %}
+        </div>
+    {% endfor %}
+
+
+
+
+    <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="music_update">
+    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="gridSystemModalLabel" data-toggle="modal" data-target="#motai">创建收藏夹</h4>
+      </div>
+<form method="get" action="/user/coll_create/">
+    <div class="modal-body">
+            <div class="form-group">
+            <label for="recipient-name" class="control-label">收藏夹名称</label>
+            <input type="text" class="form-control" name="c_name" id="">
+          </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            <button type="submit" class="btn btn-primary" id="m_submit">确定上传</button>
+        </div>
+
+    </div>
+    </form>
+    </div>
+    </div>
+    </div>
+{% endblock user_base %}

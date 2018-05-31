@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block base %}
+    <script>
+    function add_playlist(musicid){
+        $.get('/add_music/?music_id='+musicid,function (jieguo) {
+            if(jieguo.data==1){
+                alert('已添加至播放列表')
+            }else{
+                alert('添加失败')
+            }
+        })
+    }
+    </script>
+<div class="page-header">
+    <div style="margin-left: 30px"><h2>专辑：{{ album.name }}&nbsp;<small>{{ album.auth}}</small></h2></div>
+</div>
+    <div class="row">
+  <div class="col-md-3"><img src="{{ album.image }}" class="img-circle" style="width: 200px;height: 200px;position: absolute;left: 50%;
+    top: 150px;
+    transform: translate(-50%,-50%);">
+  </div>
+    <div class="list-group" style="width: 50%;margin: 30px auto">
+        <li class="list-group-item active">
+        {{ album.name }}<div style="float: right">上传人：{{ album.owner }}</div>
+        </li>
+        {% for item in musiclist %}
+        <li class="list-group-item"><a href="/detail{{ item.id }}_info">{{ item.name }}</a>
+            <input onclick="add_playlist({{ item.id }})" type="image" src="/static/media/icon/icon_add.png" style="float: right" value={{ item.id }}>
+        </li>
+        {% endfor %}
+
+    </div>
+{% endblock base %}

@@ -1,0 +1,15 @@
+{% extends 'music/detail.html' %}
+{% block detail %}
+    <div class="list-group" style="width: 50%;margin: 30px auto">
+        <a href="/album/?albumid={{ album.id }}" class="list-group-item active">
+        {{ album.name }}
+        </a>
+        {% for item in musiclist %}
+            <li class="list-group-item">
+        <a href="/detail{{ item.id }}_info">{{ item.name }}</a>
+            <input onclick="add_playlist({{ item.id }})" type="image" src="/static/media/icon/icon_add.png" style="float: right" value={{ item.id }}>
+            </li>
+        {% endfor %}
+
+    </div>
+{% endblock detail %}

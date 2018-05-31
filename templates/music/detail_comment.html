@@ -1,0 +1,92 @@
+{% extends 'music/detail.html' %}
+{% block detail %}
+<h2>评论信息</h2>
+
+    <script>
+    function reply(event){
+            $.ajax({
+                url:/reply_handle/,
+                type:'GET',
+                data:{
+                    com_id:event,
+                    music_id:{{ music.id }},
+                    content:$('#content').val()
+                },
+                success:function (jieguo) {
+                    if(jieguo.data==1){
+                        window.location.replace('/detail{{ music.id }}_comment1/')
+                    }
+                    else if(jieguo.data==2){
+                        alert('回复长度必须大于5个字符且小于140字符')
+                    }
+                    else{
+                        alert('不明原因回复失败')
+                    }
+                }
+            })
+    }
+
+
+
+    </script>
+    {% for item in com %}
+        <div class="panel-body"><img class="img-rounded" src="{{ item.com.owner.uphoto }}" style="width: 35px;height: 35px">
+            &nbsp<a>{{ item.com.owner }}</a>：{{ item.com.content }}</div>
+            <div style="float: left;color: #9f9f9f;margin-left: 50px">&nbsp {{ item.com.time|date:"m-d H:i" }}
+            <a  class="reply" onclick="reply({{ item.com.id }})">回复评论</a>
+            </div>
+        <div style="float: right">
+        {% if item.com.owner.id == request.session.userid %}
+            <a href="/del_com/?com_id={{ item.com.id }}&music_id={{ music.id }}" > 删除</a>
+        {% endif %}
+        </div>
+
+
+
+            {% for child in item.ccom %}
+                <div style="margin-left: 50px">
+                <hr>
+                <div class="panel-body"><img class="img-rounded" src="{{ child.owner.uphoto }}" style="width: 35px;height: 35px">
+            &nbsp<a>{{ child.owner }}</a>：{{ child.content }}</div>
+            <div style="float: left;color: #9f9f9f;margin-left: 50px">&nbsp {{ child.time|date:"m-d H:i" }}</div>
+                    {% if child.owner.id == request.session.userid %}
+                <div style="float: right">
+                <a href="/del_com/?com_id={{ child.id }}&music_id={{ music.id }}" > 删除</a>
+                </div>
+                {% endif %}
+                </div>
+
+                <br>
+                {% endfor %}
+
+    <hr>
+    {% endfor %}
+        <textarea class="form-control" rows="3" id="content" required="required" placeholder="添加评论" ></textarea>
+        <br><button class="btn btn-default" type="button" onclick="reply()">添加评论</button>
+
+
+    <div aria-label="Page navigation" style="text-align: center">
+  <ul class="pagination" >
+    <li>
+        {% if ccom.has_previous %}
+      <a href="/user/user_update{{ ccom.previous_page_number }}/" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+            {% else %}
+            <li class="disabled"><span aria-hidden="true">&laquo;</span></li>
+          {% endif %}
+    {% for item in paginator.page_range %}
+        <li ><a href="/detail{{ music.id }}_2{{ item }}">{{ item }}</a></li>
+      {% endfor %}
+    <li>
+        {% if ccom.has_next %}
+      <a href="/user/user_update{{ ccom.next_page_number }}/" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+        {% else %}
+            <li class="disabled"><span aria-hidden="true">&raquo;</span></li>
+          {% endif %}
+
+      </a>
+    </li>
+  </ul>
+</div>
+{% endblock detail %}

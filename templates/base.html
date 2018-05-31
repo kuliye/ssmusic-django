@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="/static/js/jquery-1.12.4.min.js"></script>
+    <link rel="stylesheet" href="/static/css/bootstrap.css">
+    <script src="/static/js/bootstrap.js"></script>
+    <script src="/static/js/fileinput.js"></script>
+    <script src="/static/js/zh.js"></script>
+    <link href="/static/css/fileinput.css" rel="stylesheet">
+
+    </head>
+<body class="body">
+
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/">SMUSIC</a>
+    </div>
+  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li><a href="/found/" id="test">发现</a></li>
+        <li><a href="/playlist/">播放列表</a></li>
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right">
+      <li id="playcontrol"></li>
+          {% if request.session.userid %}
+            <li><a href="/user/user_info/">个人中心</a></li>
+            <li><a href="/user/logout/">退出登陆</a></li>
+          {% else %}
+          <a href="/user/login/" class="btn btn-default navbar-btn">登陆</a>
+          <a href="/user/register/" class="btn btn-default navbar-btn">注册</a>
+          {% endif %}
+
+
+
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+{% block base %}{% endblock base %}
+</body>
+</html>

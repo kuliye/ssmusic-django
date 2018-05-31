@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block base %}
+    <script>
+    $(function () {
+        $("#login").click(function () {
+            $.ajaxSetup({
+            data:{csrfmiddlewaretoken:'{{ csrf_token }}'}})
+            $.ajax({
+                url:'/user/login_handle/',
+                type:'POST',
+                data:{
+                    uname:$("#uname").val(),
+                    upwd:$("#upwd").val(),
+                },success:function (jieguo) {
+                    if(jieguo.data==1){
+                        $("#name_check").addClass('hidden').html('');
+                        window.location.replace(jieguo.url);
+                    }
+                    else{
+                        $("#name_check").removeClass('hidden').html('用户名或密码错误')
+                    }
+                }
+            })
+        })
+    })
+    </script>
+    {% csrf_token %}
+    <div class="panel panel-primary" style="width: 50033px;">
+  <div class="panel-heading">登陆</div>
+  <div class="panel-body">
+    <div class="form-group">
+    <label for="exampleInputEmail1">用户名：</label>
+    <input type="text" class="form-control" id="uname" placeholder="用户名" name="uname">
+    <div class="alert alert-danger hidden" role="alert" id="name_check"></div>
+  </div>
+
+    <div class="form-group">
+    <label for="exampleInputPassword1">密码：</label>
+    <input type="password" class="form-control" id="upwd" placeholder="密码" name="upwd">
+  </div>
+
+
+      <button type="button" class="btn btn-default" id="login">登陆</button>
+    </div>
+</div>
+{% endblock base %}
+

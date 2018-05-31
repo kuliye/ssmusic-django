@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block base %}
+<script>
+    function add_playlist(musicid){
+        $.get('/add_music/?music_id='+musicid,function (jieguo) {
+            if(jieguo.data==1){
+                alert('已添加至播放列表')
+            }else{
+                alert('添加失败')
+            }
+        })
+    }
+
+    </script>
+    <ol class="breadcrumb">
+  <li><a href="/found/">发现</a></li>
+        {% if type.pid != null %}
+  <li><a href="/type{{ type.pid_id }}_page1/">{{ type.pid.name }}</a></li>
+        {% endif %}
+  <li class="active">{{ type.name }}</li>
+</ol>
+
+{% for item in album %}
+        <div class="panel panel-primary" style="width: 800px;margin: 10px auto">
+        <div class="panel-heading">
+            <a href="/album/?albumid={{ item.album.id }}" style="width: 800px;color: white">{{ item.album.name }}</a>
+        </div>
+  <div class="panel-body">
+    <span><image class="img-rounded" src="{{ item.album.image }}" style="width: 150px;height: 150px;float:left"></image></span>
+  <div style="margin-left: 160px;width: 600px">
+    {% for music in item.music %}
+          <li class="list-group-item"><a href="/detail{{ music.id }}_info/">{{ music.name }}</a><input onclick="add_playlist({{ music.id }})" type="image" src="/static/media/icon/icon_add.png" style="float: right" value={{ music.id }}>
+          <span class="hidden">{{ music.src }}</span></li>
+        {% endfor %}
+  </div>
+  </div>
+  </div>
+    {% endfor %}
+
+
+
+
+<div aria-label="Page navigation" style="text-align: center">
+  <ul class="pagination" >
+    <li>
+        {% if album.has_previous %}
+      <a href="/user/user_update{{ album.previous_page_number }}/" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+            {% else %}
+            <li class="disabled"><span aria-hidden="true">&laquo;</span></li>
+          {% endif %}
+
+    {% for item in paginator.page_range %}
+        <li ><a href="/user/user_update{{ item }}">{{ item }}</a></li>
+      {% endfor %}
+    <li>
+        {% if album.has_next %}
+      <a href="/user/user_update{{ album.next_page_number }}/" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+        {% else %}
+            <li class="disabled"><span aria-hidden="true">&raquo;</span></li>
+          {% endif %}
+
+
+  </ul>
+</div>
+{% endblock base %}

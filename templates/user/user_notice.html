@@ -1,0 +1,14 @@
+{% extends 'user/user_base.html' %}
+{% block user_base %}
+
+
+    <ul class="list-group" style="margin: 20px">
+        {% for item in notice %}
+            <li class="list-group-item">{{ item.owner }}在<a href="/detail{{ item.music_id }}_comment1">{{ item.music }}</a>中追评了你</li>
+        {% endfor %}
+</ul>
+
+
+
+
+{% endblock user_base %}

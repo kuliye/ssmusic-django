@@ -1,0 +1,65 @@
+{% extends 'music/detail.html' %}
+{% block detail %}
+    <script>
+     function fun(event) {
+      $.get('/add_music/?music_id='+event,function() {
+          alert('添加成功')
+
+            })
+     }
+     function bofang(musicid) {
+         $.get('/playmusic/?musicid='+musicid,function (jieguo) {
+             $("#src").html('<audio autoplay controls id="audio"> <source src='+jieguo.src+ ' type="audio/mpeg"> </audio>')
+         })
+
+     }
+     function coll_add(musicid,collid) {
+        $.get('/coll_handle/?musicid='+musicid+'&collection='+collid,function (jieguo) {
+            if(jieguo.data==1){
+                alert('添加成功')
+            }else if (jieguo.data==2){
+                alert('该收藏夹已经存在此音乐')
+            }else{
+                alert('未知原因收藏失败')
+            }
+        })
+     }
+
+
+    </script>
+    <h2>乐曲信息</h2>
+<div style="float:left;margin:20px">
+    <ul class="list-group" style="width: 250%">
+        <li class="list-group-item">乐曲名称：{{ music.name }}</li>
+        <li class="list-group-item">所属专辑：{{ music.album }}</li>
+        <li class="list-group-item">上传人：{{ album.owner }}</li>
+        <li class="list-group-item">点击量：{{ music.click }}</li>
+        <li class="list-group-item">推荐指数：{{ music.tuijian }}</li>
+        <li class="list-group-item">评论数：</li>
+        <li class="list-group-item" id="src"></li>
+    </ul>
+    <button type="button" class="btn btn-danger" onclick="bofang({{ music.id }}) ">立即播放</button>
+
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#music_update">收藏</button>
+    <button type="button" class="btn btn-default" onclick="fun({{ music.id }}) ">添加到播放列表</button>
+
+
+
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="music_update">
+    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="gridSystemModalLabel" data-toggle="modal" data-target="#motai">选择收藏夹</h4>
+      </div>
+        <div class="list-group">
+    {% for item in collection %}
+        <button type="button" class="list-group-item" onclick="coll_add({{ music.id }},{{ item.id }})">{{ item.name }}</button>
+            {% endfor %}
+</div>
+
+    </div>
+    </div>
+    </div>
+    </div>
+{% endblock detail %}

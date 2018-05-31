@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block base %}
+{% for item in data %}
+    <div class="panel panel-primary" style="margin: 0px 10%">
+
+  <div class="panel-heading">
+    <div class="panel-title">{{ item.type.name }}<span style="float: right"><a href="/type{{ item.type.id }}_page1/" style="color: white"> 更多</a></span></div>
+  </div>
+  <div class="panel-body">
+    <div class="row">
+  <div class="col-md-4"><div class="list-group">
+      <li class="list-group-item active">
+    点击最高
+  </li>
+      {% for music in item.musiclist %}
+  <a href="/detail{{ music.id }}_info" class="list-group-item">{{ music.name }}<span class="badge">{{ music.click }}</span></a>
+          {% endfor %}
+</div></div>
+
+<div class="col-md-4"><div class="list-group">
+  <li class="list-group-item active">
+    最新专辑
+  </li>
+    {% for album in item.album %}
+  <a href="/album/?albumid={{ album.id }}" class="list-group-item">{{ album.name }}<span class="label label-danger" style="float: right">new</span></a>
+        {% endfor %}
+</div></div>
+
+
+    <div class="col-md-4"><div class="list-group">
+  <li class="list-group-item active">
+    按分类查看
+  </li>
+        {% for ty in item.typed %}
+  <a href="/type{{ ty.id }}_page1/" class="list-group-item">{{ ty.name }}</a>
+            {% endfor %}
+</div></div>
+
+
+  </div>
+</div>
+    </div></br>
+    {% endfor %}
+{% endblock base %}

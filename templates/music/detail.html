@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block base %}
+<div class="page-header">
+    <div style="margin-left: 30px"><h2>{{ music.name }}&nbsp;<small>{{ album.name }}</small></h2></div>
+</div>
+    <div class="row">
+  <div class="col-md-3"><img src="{{ album.image }}" class="img-circle" style="width: 200px;height: 200px;position: absolute;left: 50%;
+    top: 150px;
+    transform: translate(-50%,-50%);">
+  </div>
+  <div class="col-md-8">
+      <div class="btn-group btn-group-justified" role="group" aria-label="...">
+  <div class="btn-group" role="group">
+    <a href="/detail{{ music.id }}_info" type="button" class="btn btn-default">音乐信息</a>
+  </div>
+  <div class="btn-group" role="group">
+    <a href="/detail{{ music.id }}_comment1" type="button" class="btn btn-default">评论</a>
+  </div>
+  <div class="btn-group" role="group">
+    <a href="/detail{{ music.id }}_album" type="button" class="btn btn-default">专辑信息</a>
+  </div>
+</div>
+
+
+      {% block detail %}
+
+      {% endblock detail %}
+
+  </div>
+</div>
+
+{% endblock base %}

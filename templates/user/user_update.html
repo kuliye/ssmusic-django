@@ -1,0 +1,218 @@
+{% extends 'user/user_base.html' %}
+{% block user_base %}
+    <script>
+    function delete_album(albumid){
+        if (confirm("确认要删除？")) {
+            $.get('/user/delete_album/?albumid='+albumid,function (jieguo) {
+                if(jieguo.data==1){
+                alert('删除成功');window.location.reload()}
+                else{
+                    alert('删除失败')
+                }
+            })
+    }}
+    function delete_album_detail(musicid) {
+        if (confirm("确认要删除？")) {
+            $.get('/user/delete_album_detail/?musicid='+musicid,function (jieguo) {
+                if(jieguo.data==1){
+                alert('删除成功');window.location.reload()}
+                else{
+                    alert('删除失败')
+                }
+            })
+        }
+    }
+    function add_playlist(musicid){
+        $.get('/add_music/?music_id='+musicid,function (jieguo) {
+            if(jieguo.data==1){
+                alert('已添加至播放列表')
+            }else{
+                alert('添加失败')
+            }
+        })
+    }
+
+    </script>
+
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#motai" style="float: left;margin-top: 10px">创建专辑</button>
+    {% for item in album %}
+        <div class="panel panel-primary" style="width: 800px;margin: 10px auto">
+        <div class="panel-heading">
+            <a href="/album/?albumid={{ item.album.id }}" style="width: 800px;color: white">{{ item.album.name }}</a>
+        <input class="" type="image" src="/static/media/icon/icon_delete.png" style="float: right" onclick="delete_album({{ item.album.id }})"></div>
+  <div class="panel-body">
+    <span><image class="img-rounded" src="{{ item.album.image }}" style="width: 150px;height: 150px;float:left"></image></span>
+  <div style="margin-left: 160px;width: 600px">
+    {% for music in item.music %}
+          <li class="list-group-item"><a href="/detail{{ music.id }}_info/">{{ music.name }}</a><input onclick="add_playlist({{ music.id }})" type="image" src="/static/media/icon/icon_add.png" style="float: right" value={{ music.id }}>
+              <input class="" type="image" src="/static/media/icon/icon_cha.png" style="float: right" onclick="delete_album_detail({{ music.id }})">
+          <span class="hidden">{{ music.src }}</span></li>
+        {% endfor %}
+      <button type="button" class="btn btn-default list-group-item m_update"data-toggle="modal" data-target="#music_update">添加乐曲</button>
+        <div class="hidden">{{ item.album.id }}</div>
+  </div>
+  </div>
+  </div>
+    {% endfor %}
+    <script>
+
+    $(function () {
+        $('.m_update').click(function () {
+            $('#m_album').val($(this).next().html())
+        })
+        $('#m_submit').click(function () {
+            {#判断表单是否填写完整#}
+        })
+
+
+    })
+
+
+    </script>
+
+
+    <div aria-label="Page navigation" style="text-align: center">
+  <ul class="pagination" >
+    <li>
+        {% if album.has_previous %}
+      <a href="/user/user_update{{ album.previous_page_number }}/" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+            {% else %}
+            <li class="disabled"><span aria-hidden="true">&laquo;</span></li>
+          {% endif %}
+
+    {% for item in paginator.page_range %}
+        <li ><a href="/user/user_update{{ item }}">{{ item }}</a></li>
+      {% endfor %}
+    <li>
+        {% if album.has_next %}
+      <a href="/user/user_update{{ album.next_page_number }}/" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+        {% else %}
+            <li class="disabled"><span aria-hidden="true">&raquo;</span></li>
+          {% endif %}
+
+
+  </ul>
+</div>
+
+
+    <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="music_update">
+    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="gridSystemModalLabel" data-toggle="modal" data-target="#motai">上传乐曲</h4>
+      </div>
+
+
+<form method="post" action="/user/music_update/" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="modal-body">
+            <div class="form-group">
+            <label for="recipient-name" class="control-label">乐曲名称</label>
+            <input type="text" class="form-control" name="m_name" id="">
+          </div>
+        <div class="file-group">
+            <label for="recipient-name" class="control-label">上传乐曲</label>
+            <input type="file" class="file" data-show-preview="false" name='m_src' id=""><br>
+        </div>
+        <div class="form-group">
+            <label for="recipient-name" class="control-label">乐曲简介</label>
+            <input type="text" class="form-control" name="m_info" id="">
+            <input type="hidden" name="m_album"  id="m_album">
+          </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            <button type="submit" class="btn btn-primary" id="m_submit">确定上传</button>
+        </div>
+
+    </div>
+    </form>
+    </div>
+    </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+<form method="post" action="/user/album_handle/" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="motai">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="gridSystemModalLabel">专辑信息</h4>
+      </div>
+        <div class="modal-body">
+            <div class="form-group">
+            <label for="recipient-name" class="control-label">专辑名称</label>
+            <input type="text" class="form-control" name="a_name">
+          </div>
+
+        <form role="form">
+  <div class="form-group">
+    <label for="name">选择列表</label>
+    <select class="form-control" id="select">
+    <option>请选择专辑类型</option>
+                    {% for item in type %}
+                    <option>{{ item.name }}</option>
+                    {% endfor %}
+    </select><br>
+
+<script>
+    $('#select').change(function () {
+        $("#selectd").empty()
+        $.get('/user/type_select/?type='+$('#select').val(),function (jieguo) {
+            $.each(jieguo.typed,function () {
+            $("#selectd").append('<option>'+this.name+'</option>')
+            })
+        })
+    })
+</script>
+    <div class="form-group">
+    <label for="name">选择列表</label>
+    <select class="form-control" id="selectd" name="type">
+        <option>请选择专辑类型</option>
+        </select><br>
+
+            <div class="form-group">
+            <label for="recipient-name" class="control-label">专辑作者</label>
+            <input type="text" class="form-control" name="a_auth">
+          </div>
+            <div class="form-group">
+                <label for="recipient-name" class="control-label">上传封面</label>
+            <input type="file" name="pic2" class="file" data-show-preview="false"><br>
+                <div>
+
+            <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="submit" class="btn btn-primary" id="sub">确定创建</button>
+      </div>
+
+
+
+
+</div>
+        </div>
+    </div>
+    </div>
+            </form>
+
+  </div>
+</div>
+
+
+
+
+
+
+
+{% endblock user_base %}

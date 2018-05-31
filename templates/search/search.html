@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block base %}
+{% if query %}
+    <h3 align="center">关键字{{ query }}的搜索结果</h3>
+    <div class="list-group">
+    {% for result in page.object_list %}
+        <a href="/detail{{ result.object.id }}_info/"><button class="list-group-item" style="width: 800px;margin: 50px auto">{{ result.object.name }}-------<small>{{ result.object.album.name }}</small>
+            <span class="badge">{{ result.object.click }}</span></button></a>
+    {% empty %}
+        <button class="list-group-item" style="width: 800px;margin: 50px auto">没有查找到内容</button>
+    {% endfor %}
+</div>
+
+
+     <div aria-label="Page navigation" style="text-align: center">
+  <ul class="pagination" >
+    <li>
+        {% if page.has_previous %}
+      <a href="?q={{ query }}&amp;page={{ page.previous_page_number }}" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+            {% else %}
+            <li class="disabled"><span aria-hidden="true">&laquo;</span></li>
+          {% endif %}
+    {% for item in paginator.page_range %}
+        <li ><a href="?q={{ query }}&amp;page={{ item }}">{{ item }}</a></li>
+      {% endfor %}
+    <li>
+        {% if page.has_next %}
+      <a href="?q={{ query }}&amp;page={{ page.next_page_number }}" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+        {% else %}
+            <li class="disabled"><span aria-hidden="true">&raquo;</span></li>
+          {% endif %}
+
+
+  </ul>
+</div>
+
+
+{% endif %}
+{% endblock base %}

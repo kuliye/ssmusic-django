@@ -1,0 +1,25 @@
+{% extends 'user/user_base.html' %}
+{% block user_base %}
+
+
+
+<div class="panel">
+  <div class="panel-body">
+
+  <h3>最近播放</h3>
+      {% for item in historylist %}
+          <p><a href="/detail{{ item.music.id }}_info/"> {{ item.music.name }}</a></p>
+      {% endfor %}
+  </div>
+
+  <div class="panel-footer">
+      <h4>更换头像</h4>
+      <form method="post" action="/user/upload/" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="pic1"><br>
+        <input type="submit" value="上传">
+    </form></div>
+    </div>
+
+
+{% endblock user_base %}

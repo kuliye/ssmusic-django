@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block base %}
+
+    <div class="row">
+  <div class="col-md-3"><img src="{{ request.session.userphoto }}" class="img-thumbnail" style="width: 200px;height: 200px;position: absolute;left: 50%;
+    top: 150px;
+    transform: translate(-50%,-50%);">
+      <h2 style="margin: 300px 35%">{{ request.session.username }}</h2>
+
+  </div>
+  <div class="col-md-8">
+      <div class="btn-group btn-group-justified" role="group" aria-label="...">
+  <div class="btn-group" role="group">
+    <a href="/user/user_info/" type="button" class="btn btn-default">用户信息</a>
+  </div>
+  <div class="btn-group" role="group">
+    <a href="/user/user_notice/" type="button" class="btn btn-default">消息</a>
+  </div>
+  <div class="btn-group" role="group">
+    <a href="/user/user_coll/" type="button" class="btn btn-default">收藏</a>
+
+  </div>
+          <div class="btn-group" role="group">
+    <a href="/user/user_update1/" type="button" class="btn btn-default">上传音乐</a>
+  </div>
+</div>
+
+
+      {% block user_base %}
+
+      {% endblock user_base  %}
+
+  </div>
+</div>
+{% endblock base %}

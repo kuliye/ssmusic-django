@@ -1,0 +1,3 @@
+{{ object.name }}
+{{ object.album.name }}
+{{ object.album.auth }}
