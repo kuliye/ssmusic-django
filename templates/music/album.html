@@ -1,16 +1,6 @@
 {% extends 'base.html' %}
 {% block base %}
-    <script>
-    function add_playlist(musicid){
-        $.get('/add_music/?music_id='+musicid,function (jieguo) {
-            if(jieguo.data==1){
-                alert('已添加至播放列表')
-            }else{
-                alert('添加失败')
-            }
-        })
-    }
-    </script>
+    <script src="/static/js/add_playlist.js"></script>
 <div class="page-header">
     <div style="margin-left: 30px"><h2>专辑：{{ album.name }}&nbsp;<small>{{ album.auth}}</small></h2></div>
 </div>

@@ -1,28 +1,6 @@
 {% extends 'base.html' %}
 {% block base %}
-    <script>
-    var aud=$('#audio')
-    aud.onended=function () {
-        alert('播放结束')
-    }
-    function delete_playlist(musicid) {
-        if (confirm("确认要删除？")) {
-            $.get('/playlist_delete/?musicid='+musicid,function (jieguo) {
-                if(jieguo.data==1){
-                    window.location.reload()
-                }else{
-                    alert('删除失败')
-                }
-            })
-        }
-    }
-    function play(musicid) {
-        $.get('/playmusic/?musicid='+musicid,function (jieguo) {
-
-                $('#src').html('<audio autoplay controls id="audio"> <source src='+jieguo.src+ ' type="audio/mpeg"> </audio>')
-
-        })
-    }
+    <script src="/static/js/playlist.js">
     </script>
 <div class="panel panel-success" style="width: 1000px;margin: 10px auto">
   <div class="panel-heading">我的播放列表</div>
