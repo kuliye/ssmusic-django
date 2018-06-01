@@ -129,9 +129,9 @@ USE_TZ = False
 
 STATIC_ROOT='/var/ssmusic/static/'
 STATIC_URL = '/static/'
-# STATICFILES_DIRS=[
-#     os.path.join(BASE_DIR,'static')
-# ]
+STATICFILES_DIRS=[
+    os.path.join(BASE_DIR,'static')
+]
 
 MEDIA_PHOTO=os.path.join(BASE_DIR,'/var/ssmusic/static/media/user_photo')#设置传图片的路径
 MEDIA_ALBUM=os.path.join(BASE_DIR,'/var/ssmusic/static/media/album_image')
