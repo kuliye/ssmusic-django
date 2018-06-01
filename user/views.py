@@ -11,6 +11,8 @@ from music.models import *
 from django.core.paginator import Paginator
 from .login_check import *
 from django.views.decorators.cache import cache_page
+import os
+import time
 client =  redis.Redis(host='localhost', port=6379, db=0)
 
 
@@ -134,16 +136,20 @@ def user_coll(request):
 @login_check
 def upload(request):
     f1 = request.FILES['pic1']
-    username = request.session.get('username')
-    userinfo = UserInfo.objects.get(uname=username)
-    pic = os.path.join(settings.MEDIA_PHOTO,str(userinfo.id)+f1.name)
-    with open(pic, 'wb') as pic:
-        for c in f1.chunks():
-            pic.write(c)
-    userinfo.uphoto='/static/media/user_photo/'+str(userinfo.id)+f1.name#不能让文件重名
-    userinfo.save()
-    request.session['userphoto'] = str(userinfo.uphoto)
-    return redirect('/user/user_info/')
+    fmat=['.gif','.jpg','.png','.jpeg']#支持图片的格式
+    if os.path.splitext(f1.name)[1] in fmat:#如果符合图片格式
+        username = request.session.get('username')
+        userinfo = UserInfo.objects.get(uname=username)
+        filename=str(userinfo.id)+str(int(time.time()))+os.path.splitext(f1.name)[1]#用用户id加时间命名，防止重复
+        pic = os.path.join(settings.MEDIA_PHOTO,filename)
+        userinfo.uphoto='/static/media/user_photo/'+filename
+        with open(pic, 'wb') as pic:
+            for c in f1.chunks():
+                pic.write(c)
+        userinfo.save()
+        request.session['userphoto'] = str(userinfo.uphoto)
+        return render(request,'user/user_info.html',{'erro':0})
+    return render(request,'user/user_info.html',{'erro':1})
 
 @login_check
 def type_select(request):
