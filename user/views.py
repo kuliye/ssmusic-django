@@ -1,7 +1,7 @@
 from django.http import HttpRequest,HttpResponse,HttpResponseRedirect,JsonResponse
 from django.shortcuts import render,redirect
-import random
 from django.core.mail import send_mail
+import random
 from .models import *
 from hashlib import sha1
 import os
