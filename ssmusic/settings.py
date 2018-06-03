@@ -25,8 +25,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'al1lc-(aw5+$+&o5)9gja%23w@ki_&@1^ne0ny=)kito04xc#5'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-# DEBUG = True
+# DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -127,19 +127,19 @@ USE_TZ = False
 
 
 
-STATIC_ROOT='/var/ssmusic/static/'
+# STATIC_ROOT='/var/ssmusic/static/'
 STATIC_URL = '/static/'
 STATICFILES_DIRS=[
     os.path.join(BASE_DIR,'static')
 ]
 
-MEDIA_PHOTO=os.path.join(BASE_DIR,'/var/ssmusic/static/media/user_photo')#设置传图片的路径
-MEDIA_ALBUM=os.path.join(BASE_DIR,'/var/ssmusic/static/media/album_image')
-MEDIA_MUSIC=os.path.join(BASE_DIR,'/var/ssmusic/static/media/music')
+# MEDIA_PHOTO=os.path.join(BASE_DIR,'/var/ssmusic/static/media/user_photo')#设置传图片的路径
+# MEDIA_ALBUM=os.path.join(BASE_DIR,'/var/ssmusic/static/media/album_image')
+# MEDIA_MUSIC=os.path.join(BASE_DIR,'/var/ssmusic/static/media/music')
 
-# MEDIA_PHOTO=os.path.join(BASE_DIR,'static/media/user_photo')#设置传图片的路径
-# MEDIA_ALBUM=os.path.join(BASE_DIR,'static/media/album_image')
-# MEDIA_MUSIC=os.path.join(BASE_DIR,'static/media/music')
+MEDIA_PHOTO=os.path.join(BASE_DIR,'static/media/user_photo')#设置传图片的路径
+MEDIA_ALBUM=os.path.join(BASE_DIR,'static/media/album_image')
+MEDIA_MUSIC=os.path.join(BASE_DIR,'static/media/music')
 
 
 EMAIL_USE_SSL = True

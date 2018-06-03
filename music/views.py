@@ -87,7 +87,7 @@ def detail_album(request,musicid):
 def reply_handle(request):
     '''回复评论'''
     content = request.GET.get('content')
-    if len(content)<=5 or len(content)>=140:
+    if len(content)<=5 or len(content)>=140:#限制长度
         context={'data':2}
     else:
         com_id=request.GET.get('com_id')#父评论的id，如果没有则为空
@@ -98,7 +98,7 @@ def reply_handle(request):
         com.owner_id=userid
         com.pcom_id=com_id
         com.content=content
-        com.save()
+        com.save()#存储评论信息
         if com.pcom_id !=None:
             client.zincrby(str(com.pcom.owner_id)+'com',com.id)#如果评论的父id不为空，则提示父id的用户收到评论信息
         context={'data':1}
@@ -149,6 +149,7 @@ def playmusic(request):
     return JsonResponse({'src':str(music.src)})
 
 def album(request):
+    '''专辑页面'''
     albumid=request.GET.get('albumid')
     album=Album.objects.get(id=albumid,isDelete=False)#查询专辑
     musiclist=Music.objects.filter(album=album,isDelete=False)#查询专辑包含的乐曲
@@ -159,12 +160,14 @@ def test(request):
     return render(request,'music/test.html')
 
 def player(request):
+    '''添加到播放列表'''
     userid = request.session.get('userid')
     musiclist=PlayList.objects.filter(user_id=userid, isDelete=False).order_by('-id')#查询播放列表，按照最新的排序
     context = {'data': musiclist}
     return render(request,'player.html',context)
 
 def playlist_delete(request):
+    '''删除播放列表的音乐'''
     musicid=request.GET.get('musicid')
     userid=request.session.get('userid')
     PlayList.objects.filter(user_id=userid,music_id=musicid).delete()#删除
@@ -179,8 +182,9 @@ def playlist_delete(request):
 #
 #     return render(request,'music/test.html',{'posts': posts})
 
-@cache_page(60 * 3)
+@cache_page(60 * 10)#设置缓存
 def found(request):
+    '''发现页面'''
     type = Type.objects.filter(pid__isnull=True)#查询pid为空的类型
     data=[]
     for item in type:
@@ -190,8 +194,9 @@ def found(request):
         data.append({'type':item,'musiclist':musiclist,'album':album,'typed':typed})#将所有查询列表放入data列表中
     return render(request,'music/found.html',{'data':data})
 
-@cache_page(60 * 3)
+@cache_page(60 * 10)
 def type(request,typeid,pindex):
+    '''按类型查看页面'''
     type=Type.objects.get(id=typeid)
     if type.pid is None:#如果类型的pid为空，则说明该类型是父类型
         typed = Type.objects.filter(pid=type)#查询父类型包含的所有子类型
@@ -206,3 +211,5 @@ def type(request,typeid,pindex):
     page = p.page(pindex)
     context = {'type': type, 'album': page, 'paginator': p}
     return render(request,'music/type.html',context)
+
+
